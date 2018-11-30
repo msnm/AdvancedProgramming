@@ -26,16 +26,24 @@ public class StartClient {
         }
         int port = Integer.parseInt(args[1]);
 
+        //1. NetworkAddress of the chatServer
         NetworkAddress chatServerAddress = new NetworkAddress(args[0], port);
 
+        //2. Create a random NetworkAddress for the chatClient
         MessageManager clientsOnThisMachine = new MessageManager();
+
+        //3. To send messages to the chatServer we make use of a ChatServerStub
         ChatServer chatServer = new ChatServerStub(chatServerAddress, clientsOnThisMachine);
 
+        //4. We create two people who can chat together! It is a groupchat!
         ChatClient chatClient1 = new ChatClientImpl("Michael", chatServer);
         new ChatFrame(chatClient1);
         ChatClient chatClient2 = new ChatClientImpl("Quirine", chatServer);
         new ChatFrame(chatClient2);
 
+        //5. The server will send receive messages. Therefore we have a chatClientSkeleton who listends
+        //   to its port. The chatSkeleton has a list of chatClients, because each client must receive
+        //   the message.
         List<ChatClient> chatClients = new ArrayList<>();
         chatClients.add(chatClient1);
         chatClients.add(chatClient2);
@@ -43,7 +51,7 @@ public class StartClient {
         ChatClientSkeleton chatClientSkeleton1 = new ChatClientSkeleton(chatClients, clientsOnThisMachine);
 
 
-
+        //  This ChatSkeleton runs on a different thread! If not this will block the execution of the lines underneath.
         Thread thread = new Thread(chatClientSkeleton1);
 
         //This is a Deamon thread, because it is a non-blocking thread. This means if the JVM stops, this thread
@@ -51,6 +59,7 @@ public class StartClient {
         thread.setDaemon(true);
         thread.start();
 
+        //6. We register two clients so they can chat together!
         ((ChatClientImpl) chatClient1).register();
         ((ChatClientImpl) chatClient2).register();
 

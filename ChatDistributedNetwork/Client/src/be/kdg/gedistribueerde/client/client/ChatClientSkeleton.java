@@ -17,6 +17,7 @@ public class ChatClientSkeleton implements Runnable {
     public ChatClientSkeleton(List<ChatClient> chatClient, MessageManager messageManager) {
         this.messageManager = messageManager;
         this.chatClients = chatClient;
+        System.out.println(messageManager.getMyAddress() + " of CHATCLIENTSKELETON");
     }
 
 
@@ -36,7 +37,7 @@ public class ChatClientSkeleton implements Runnable {
         if ("receive".equals(methodName)) {
             handleReceive(request);
         } else {
-            System.out.println("ChatClientSkeleton: received an unknown request:");
+            System.out.println("ChatClientSkeleton: received an unknown request: " + request.getMethodName() + " " + request.getOriginator() );
             System.out.println(request);
         }
     }
@@ -45,7 +46,7 @@ public class ChatClientSkeleton implements Runnable {
         System.out.println("BEGIN: CHATCLIENTSKELTON: handleReceive");
         String message = incommingRequest.getParameter("message");
         chatClients.stream().forEach(v -> v.receive(message));
-        //sendEmptyReply(incommingRequest);
+        sendEmptyReply(incommingRequest);
         System.out.println("END: CHATCLIENTSKELTON: handleReceive");
     }
 

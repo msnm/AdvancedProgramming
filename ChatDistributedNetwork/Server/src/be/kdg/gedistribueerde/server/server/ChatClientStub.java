@@ -23,7 +23,7 @@ public class ChatClientStub implements ChatClient {
         MethodCallMessage methodCallMessage = new MethodCallMessage(messageManager.getMyAddress(), "receive");
         methodCallMessage.setParameter("message", message);
         messageManager.send(methodCallMessage, chatClientAddress);
-        //checkEmptyReply();
+        checkEmptyReply();
         System.out.println("END: CHATSCLIENTSTUB: receive " + message);
     }
 

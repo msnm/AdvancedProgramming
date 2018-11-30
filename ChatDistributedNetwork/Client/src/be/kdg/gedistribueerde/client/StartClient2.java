@@ -49,6 +49,11 @@ public class StartClient2 {
         thread.start();
 
         ((ChatClientImpl) chatClient1).register();
+        try {
+            Thread.sleep(20000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         ((ChatClientImpl) chatClient2).register();
 
     }
