@@ -43,9 +43,16 @@ public class StartClient {
         ChatClientSkeleton chatClientSkeleton1 = new ChatClientSkeleton(chatClients, clientsOnThisMachine);
 
 
+
+        Thread thread = new Thread(chatClientSkeleton1);
+
+        //This is a Deamon thread, because it is a non-blocking thread. This means if the JVM stops, this thread
+        //will not prevent it. A deamon thread is like a background service.
+        thread.setDaemon(true);
+        thread.start();
+
         ((ChatClientImpl) chatClient1).register();
         ((ChatClientImpl) chatClient2).register();
-        chatClientSkeleton1.run();
 
     }
 }

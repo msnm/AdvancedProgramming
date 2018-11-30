@@ -10,7 +10,7 @@ import java.util.List;
  * @author Michael
  * @project ChatDistributedNetwork
  */
-public class ChatClientSkeleton {
+public class ChatClientSkeleton implements Runnable {
     private final MessageManager messageManager;
     private final List<ChatClient> chatClients;
 
@@ -19,21 +19,16 @@ public class ChatClientSkeleton {
         this.chatClients = chatClient;
     }
 
+
     /**
      * The main loop for this skeleton.
      */
+    @Override
     public void run() {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    MethodCallMessage request = messageManager.wReceive();
-                    handleRequest(request);
-                }
-            }
-        };
-        runnable.run();
-
+        while (true) {
+            MethodCallMessage request = messageManager.wReceive();
+            handleRequest(request);
+        }
     }
 
     private void handleRequest(MethodCallMessage request) {
