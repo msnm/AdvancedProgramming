@@ -40,7 +40,7 @@ public class ChatServerSkeleton {
     private void handleRequest(MethodCallMessage incommingRequest) {
         switch (incommingRequest.getMethodName()) {
             case "register": handleRegister(incommingRequest); break;
-            case "unregister": handleUnRegister(incommingRequest); break;
+            case "unRegister": handleUnRegister(incommingRequest); break;
             case "send": handleSend(incommingRequest); break;
             default: handleException(incommingRequest);
         }
@@ -52,7 +52,7 @@ public class ChatServerSkeleton {
         chatPerson.setNetworkAddress(incommingRequest.getOriginator());
         System.out.println("BEGIN: CHATSERVERSKELETON: handleRegister " + chatPerson.toString());
         chatServer.register(chatPerson);
-        sendEmptyReply(incommingRequest);
+        //sendEmptyReply(incommingRequest);
         System.out.println("END: CHATSERVERSKELETON: handleRegister " + chatPerson.toString());
     }
 
@@ -61,14 +61,14 @@ public class ChatServerSkeleton {
         ChatPerson chatPerson = new ChatPerson(name);
         chatPerson.setNetworkAddress(incommingRequest.getOriginator());
         chatServer.unRegister(chatPerson);
-        sendEmptyReply(incommingRequest);
+        //sendEmptyReply(incommingRequest);
     }
 
     private void handleSend(MethodCallMessage incommingRequest) {
         String name = incommingRequest.getParameter("name");
         String message = incommingRequest.getParameter("message");
         chatServer.send(name, message);
-        sendEmptyReply(incommingRequest);
+        //sendEmptyReply(incommingRequest);
     }
 
     private void handleException(MethodCallMessage incommingRequest) { }

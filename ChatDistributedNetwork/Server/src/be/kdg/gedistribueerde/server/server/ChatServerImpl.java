@@ -1,9 +1,12 @@
 package be.kdg.gedistribueerde.server.server;
 
+import be.kdg.gedistribueerde.server.communication.NetworkAddress;
 import be.kdg.gedistribueerde.server.model.ChatPerson;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of the ChatServer component.
@@ -39,6 +42,8 @@ public final class ChatServerImpl implements ChatServer {
     @Override
     public void send(String name, String message) {
         System.out.println("BEGIN: CHATSERVERSIMPL: send " + name + " " + message);
+        System.out.println("ClientsRegisted: " + clients);
+        /*
         for(ChatPerson client : clients) {
             ((ChatClientStub) chatClient).setChatClientAddress(client.getNetworkAddress());
             Runnable runnable = new Runnable() {
@@ -49,6 +54,12 @@ public final class ChatServerImpl implements ChatServer {
             };
             runnable.run();
         }
+        */
+        clients.stream().map(v -> v.getNetworkAddress())
+                .collect(Collectors.toSet())
+                .forEach(v ->  {((ChatClientStub)  chatClient).setChatClientAddress(v);
+                                    chatClient.receive(name + ": " + message);});
+
         System.out.println("END: CHATSERVERSIMPL: send " + name + " " + message);
     }
 }

@@ -14,12 +14,12 @@ public class ChatFrame extends JFrame implements TextReceiver {
     private JTextField messageField;
     private JButton sendButton;
     private JButton exitButton;
-    private ChatClientImpl chatClient;
+    private ChatClient chatClient;
 
-    public ChatFrame(ChatClientImpl chatClient) {
+    public ChatFrame(ChatClient chatClient) {
         this.chatClient = chatClient;
-        chatClient.setTextReceiver(this);
-        String name = chatClient.getName();
+        ((ChatClientImpl) chatClient).setTextReceiver(this);
+        String name = ((ChatClientImpl) chatClient).getName();
         setTitle("Chat: " + name);
         createComponents(name);
         layoutComponents();
@@ -86,11 +86,11 @@ public class ChatFrame extends JFrame implements TextReceiver {
 
     private void send() {
         String message = messageField.getText();
-        chatClient.send(message);
+        ((ChatClientImpl) chatClient).send(message);
     }
 
     private void stop() {
-        chatClient.unregister();
+        ((ChatClientImpl) chatClient).unregister();
     }
 
     public void receive(String text) {

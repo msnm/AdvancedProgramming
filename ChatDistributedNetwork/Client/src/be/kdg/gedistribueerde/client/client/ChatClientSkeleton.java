@@ -12,11 +12,11 @@ import java.util.List;
  */
 public class ChatClientSkeleton {
     private final MessageManager messageManager;
-    private final ChatClient chatClient;
+    private final List<ChatClient> chatClients;
 
-    public ChatClientSkeleton(ChatClient chatClient, MessageManager messageManager) {
+    public ChatClientSkeleton(List<ChatClient> chatClient, MessageManager messageManager) {
         this.messageManager = messageManager;
-        this.chatClient = chatClient;
+        this.chatClients = chatClient;
     }
 
     /**
@@ -49,8 +49,8 @@ public class ChatClientSkeleton {
     private void handleReceive(MethodCallMessage incommingRequest) {
         System.out.println("BEGIN: CHATCLIENTSKELTON: handleReceive");
         String message = incommingRequest.getParameter("message");
-        chatClient.receive(message);
-        sendEmptyReply(incommingRequest);
+        chatClients.stream().forEach(v -> v.receive(message));
+        //sendEmptyReply(incommingRequest);
         System.out.println("END: CHATCLIENTSKELTON: handleReceive");
     }
 

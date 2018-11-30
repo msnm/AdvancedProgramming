@@ -11,13 +11,12 @@ import be.kdg.gedistribueerde.server.server.ChatServer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * @author Michael
  * @project ChatDistributedNetwork
  */
-public class StartClient {
+public class StartClient2 {
 
     public static void main(String[] args) {
         if (args.length != 2) {
@@ -31,9 +30,9 @@ public class StartClient {
         MessageManager clientsOnThisMachine = new MessageManager();
         ChatServer chatServer = new ChatServerStub(chatServerAddress, clientsOnThisMachine);
 
-        ChatClient chatClient1 = new ChatClientImpl("Michael", chatServer);
+        ChatClient chatClient1 = new ChatClientImpl("Joske", chatServer);
         new ChatFrame(chatClient1);
-        ChatClient chatClient2 = new ChatClientImpl("Quirine", chatServer);
+        ChatClient chatClient2 = new ChatClientImpl("Maria", chatServer);
         new ChatFrame(chatClient2);
 
         List<ChatClient> chatClients = new ArrayList<>();

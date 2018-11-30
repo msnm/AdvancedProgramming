@@ -37,4 +37,22 @@ public final class NetworkAddress {
     public String toString() {
         return ipAddress + ":" + portNumber;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        NetworkAddress that = (NetworkAddress) o;
+
+        if (portNumber != that.portNumber) return false;
+        return ipAddress != null ? ipAddress.equals(that.ipAddress) : that.ipAddress == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = ipAddress != null ? ipAddress.hashCode() : 0;
+        result = 31 * result + portNumber;
+        return result;
+    }
 }

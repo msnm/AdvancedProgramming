@@ -29,7 +29,7 @@ public class ChatServerStub implements ChatServer {
         //2. Sending the message from the application layer down to the physical layer to the destinee
         messageManager.send(message, chatServerNetworkAddress);
         //3. The call is synchronous thus we wait for a positive or negative response code before we close the thread
-        checkEmptyReply();
+        //checkEmptyReply();
         System.out.println("END: CHATSERVERSTUB: Registering person " + chatPerson.toString());
     }
 
@@ -38,7 +38,7 @@ public class ChatServerStub implements ChatServer {
         MethodCallMessage message = new MethodCallMessage(messageManager.getMyAddress(),"unRegister");
         message.setParameter("name", chatPerson.getName());
         messageManager.send(message, chatServerNetworkAddress);
-        checkEmptyReply();
+        //checkEmptyReply();
     }
 
 
@@ -48,7 +48,7 @@ public class ChatServerStub implements ChatServer {
         messageCall.setParameter("name", name);
         messageCall.setParameter("message", message);
         messageManager.send(messageCall, chatServerNetworkAddress);
-        checkEmptyReply();
+        //checkEmptyReply();
     }
 
     /**
