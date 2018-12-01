@@ -43,18 +43,6 @@ public final class ChatServerImpl implements ChatServer {
     public void send(String name, String message) {
         System.out.println("BEGIN: CHATSERVERSIMPL: send " + name + " " + message);
         System.out.println("ClientsRegisted: " + clients);
-        /*
-        for(ChatPerson client : clients) {
-            ((ChatClientStub) chatClient).setChatClientAddress(client.getNetworkAddress());
-            Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    chatClient.receive(name + ": " + message);
-                }
-            };
-            runnable.run();
-        }
-        */
         clients.stream().map(v -> v.getNetworkAddress())
                 .collect(Collectors.toSet())
                 .forEach(v ->  {((ChatClientStub)  chatClient).setChatClientAddress(v);

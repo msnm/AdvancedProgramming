@@ -27,6 +27,8 @@ public class ChatServerStub implements ChatServer {
         //1. Creating the messageFormat that goes over the wire
         MethodCallMessage message = new MethodCallMessage(messageManager.getMyAddress(),"register");
         message.setParameter("name", chatPerson.getName());
+        message.setParameter("ipAddress", chatPerson.getNetworkAddress().getIpAddress());
+        message.setParameter("port", Integer.toString(chatPerson.getNetworkAddress().getPortNumber()));
         //2. Sending the message from the application layer down to the physical layer to the destinee
         messageManager.send(message, chatServerNetworkAddress);
         //3. The call is synchronous thus we wait for a positive or negative response code before we close the thread
@@ -38,6 +40,8 @@ public class ChatServerStub implements ChatServer {
     public void unRegister(ChatPerson chatPerson) {
         MethodCallMessage message = new MethodCallMessage(messageManager.getMyAddress(),"unRegister");
         message.setParameter("name", chatPerson.getName());
+        message.setParameter("ipAddress", chatPerson.getNetworkAddress().getIpAddress());
+        message.setParameter("port", Integer.toString(chatPerson.getNetworkAddress().getPortNumber()));
         messageManager.send(message, chatServerNetworkAddress);
         checkEmptyReply();
     }

@@ -29,16 +29,17 @@ public class StartClient {
         //1. NetworkAddress of the chatServer
         NetworkAddress chatServerAddress = new NetworkAddress(args[0], port);
 
-        //2. Create a random NetworkAddress for the chatClient
-        MessageManager clientsOnThisMachine = new MessageManager();
+        //2. Create a random NetworkAddress for the chatServerStub and one for the chatClientSkeleton
+        MessageManager chatServerStubAddress = new MessageManager();
+        MessageManager chatClientSkeletonAddress = new MessageManager();
 
         //3. To send messages to the chatServer we make use of a ChatServerStub
-        ChatServer chatServer = new ChatServerStub(chatServerAddress, clientsOnThisMachine);
+        ChatServer chatServer = new ChatServerStub(chatServerAddress, chatServerStubAddress);
 
         //4. We create two people who can chat together! It is a groupchat!
-        ChatClient chatClient1 = new ChatClientImpl("Michael", chatServer);
+        ChatClient chatClient1 = new ChatClientImpl("Michael", chatServer, chatClientSkeletonAddress.getMyAddress());
         new ChatFrame(chatClient1);
-        ChatClient chatClient2 = new ChatClientImpl("Quirine", chatServer);
+        ChatClient chatClient2 = new ChatClientImpl("Quirine", chatServer, chatClientSkeletonAddress.getMyAddress());
         new ChatFrame(chatClient2);
 
         //5. The server will send receive messages. Therefore we have a chatClientSkeleton who listends
@@ -48,7 +49,8 @@ public class StartClient {
         chatClients.add(chatClient1);
         chatClients.add(chatClient2);
 
-        ChatClientSkeleton chatClientSkeleton1 = new ChatClientSkeleton(chatClients, clientsOnThisMachine);
+
+        ChatClientSkeleton chatClientSkeleton1 = new ChatClientSkeleton(chatClients, chatClientSkeletonAddress);
 
 
         //  This ChatSkeleton runs on a different thread! If not this will block the execution of the lines underneath.

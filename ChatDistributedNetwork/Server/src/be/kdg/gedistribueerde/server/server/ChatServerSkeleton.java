@@ -2,6 +2,7 @@ package be.kdg.gedistribueerde.server.server;
 
 import be.kdg.gedistribueerde.server.communication.MessageManager;
 import be.kdg.gedistribueerde.server.communication.MethodCallMessage;
+import be.kdg.gedistribueerde.server.communication.NetworkAddress;
 import be.kdg.gedistribueerde.server.model.ChatPerson;
 
 /**
@@ -48,8 +49,11 @@ public class ChatServerSkeleton {
 
     private void handleRegister(MethodCallMessage incommingRequest) {
         String name = incommingRequest.getParameter("name");
+        String ipAddress = incommingRequest.getParameter("ipAddress");
+        Integer port = Integer.valueOf(incommingRequest.getParameter("port"));
         ChatPerson chatPerson = new ChatPerson(name);
-        chatPerson.setNetworkAddress(incommingRequest.getOriginator());
+        NetworkAddress networkAddress = new NetworkAddress(ipAddress, port);
+        chatPerson.setNetworkAddress(networkAddress);
         System.out.println("BEGIN: CHATSERVERSKELETON: handleRegister " + chatPerson.toString());
         chatServer.register(chatPerson);
         sendEmptyReply(incommingRequest);
@@ -58,8 +62,11 @@ public class ChatServerSkeleton {
 
     private void handleUnRegister(MethodCallMessage incommingRequest) {
         String name = incommingRequest.getParameter("name");
+        String ipAddress = incommingRequest.getParameter("ipAddress");
+        Integer port = Integer.valueOf(incommingRequest.getParameter("port"));
         ChatPerson chatPerson = new ChatPerson(name);
-        chatPerson.setNetworkAddress(incommingRequest.getOriginator());
+        NetworkAddress networkAddress = new NetworkAddress(ipAddress, port);
+        chatPerson.setNetworkAddress(networkAddress);
         chatServer.unRegister(chatPerson);
         sendEmptyReply(incommingRequest);
     }
