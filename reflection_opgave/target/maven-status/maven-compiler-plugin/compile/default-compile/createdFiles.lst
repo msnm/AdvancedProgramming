@@ -1,0 +1,6 @@
+be/kdg/distrib/communication/NetworkAddress.class
+be/kdg/distrib/communication/MessageReaderWriter.class
+be/kdg/distrib/skeletonFactory/Skeleton.class
+be/kdg/distrib/communication/MethodCallMessage.class
+be/kdg/distrib/communication/NameValuePair.class
+be/kdg/distrib/communication/MessageManager.class
