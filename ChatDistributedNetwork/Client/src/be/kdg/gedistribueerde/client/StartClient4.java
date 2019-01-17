@@ -9,15 +9,11 @@ import be.kdg.gedistribueerde.client.communication.NetworkAddress;
 import be.kdg.gedistribueerde.client.ui.ChatFrame;
 import be.kdg.gedistribueerde.server.server.ChatServer;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
 /**
  * @author Michael
  * @project ChatDistributedNetwork
  */
-public class StartClient {
+public class StartClient4 {
 
     public static void main(String[] args) {
         if (args.length != 2) {
@@ -36,7 +32,7 @@ public class StartClient {
         ChatServer chatServer = new ChatServerStub(chatServerAddress, chatClientSkeletonAddress.getMyAddress());
 
         //4. We create person1 named Michael
-        ChatClient chatClient = new ChatClientImpl(chatServer, "Gaston");
+        ChatClient chatClient = new ChatClientImpl(chatServer, "Quirine");
 
         //5. The server will send "receive"  and "getName" messages. Therefore we have a chatClientSkeleton who listens.
         ChatClientSkeleton chatClientSkeleton = new ChatClientSkeleton(chatClient, chatClientSkeletonAddress);

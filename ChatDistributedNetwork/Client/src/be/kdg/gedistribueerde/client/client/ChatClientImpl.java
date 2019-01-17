@@ -1,18 +1,15 @@
 package be.kdg.gedistribueerde.client.client;
 
 
-import be.kdg.gedistribueerde.client.communication.NetworkAddress;
-import be.kdg.gedistribueerde.client.model.ChatPerson;
 import be.kdg.gedistribueerde.server.server.ChatServer;
 
-public final class ChatClientImpl  implements ChatClient  {
+public final class ChatClientImpl implements ChatClient  {
     private ChatServer chatServer;
     private TextReceiver textReceiver;
     private String name;
 
 
-    //TODO Constructor moet orgineel blijven
-    public ChatClientImpl(String name, ChatServer chatServer) {
+    public ChatClientImpl(ChatServer chatServer, String name) {
         this.chatServer = chatServer;
         this.name = name;
     }
@@ -22,19 +19,16 @@ public final class ChatClientImpl  implements ChatClient  {
     }
 
     public void send(String message) {
-        chatServer.send(name, message);
+        chatServer.send(this.name, message);
     }
 
     public void unregister() {
-
-        ChatPerson chatPerson = new ChatPerson(this.getName());
-        chatServer.unRegister(chatPerson);
+        chatServer.unRegister(this);
     }
 
     public void register() {
         System.out.println("BEGIN: CHATCLIENTIMPL: registering person " + this.getName());
-        ChatPerson chatPerson = new ChatPerson(this.getName());
-        chatServer.register(chatPerson);
+        chatServer.register(this);
         System.out.println("END: CHATCLIENTIMPL: registering person " + this.getName());
     }
 

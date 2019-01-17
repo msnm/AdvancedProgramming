@@ -19,12 +19,25 @@ public class ChatClientStub implements ChatClient {
 
     @Override
     public void receive(String message) {
-        System.out.println("BEGIN: CHATSCLIENTSTUB: receive " + message);
+        System.out.println("BEGIN: CHATCLIENTSTUB: receive " + message +  "for networkaddress " + chatClientAddress.toString());
         MethodCallMessage methodCallMessage = new MethodCallMessage(messageManager.getMyAddress(), "receive");
         methodCallMessage.setParameter("message", message);
         messageManager.send(methodCallMessage, chatClientAddress);
         checkEmptyReply();
-        System.out.println("END: CHATSCLIENTSTUB: receive " + message);
+        System.out.println("END: CHATCLIENTSTUB: receive " + message);
+    }
+
+    @Override
+    public String getName() {
+        System.out.println("BEGIN: CHATCLIENTSTUB: getName for networkaddress " + chatClientAddress.toString());
+        MethodCallMessage methodCallMessage = new MethodCallMessage(messageManager.getMyAddress(), "getName");
+        messageManager.send(methodCallMessage, chatClientAddress);
+        MethodCallMessage reply = messageManager.wReceive();
+        if (!"result".equals(reply.getMethodName())) {
+            return "";
+        }
+        System.out.println("BEGIN: CHATCLIENTSTUB: getName for networkaddress " + chatClientAddress.toString() + " returns " + reply.getParameter("name"));
+        return reply.getParameter("name");
     }
 
     /**
@@ -45,6 +58,21 @@ public class ChatClientStub implements ChatClient {
 
     public NetworkAddress getChatClientAddress() {
         return chatClientAddress;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ChatClientStub that = (ChatClientStub) o;
+
+        return chatClientAddress != null ? chatClientAddress.equals(that.chatClientAddress) : that.chatClientAddress == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return chatClientAddress != null ? chatClientAddress.hashCode() : 0;
     }
 
     public void setChatClientAddress(NetworkAddress chatClientAddress) {

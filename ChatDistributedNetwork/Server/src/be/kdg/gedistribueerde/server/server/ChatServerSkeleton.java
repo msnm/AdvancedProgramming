@@ -16,11 +16,10 @@ public class ChatServerSkeleton {
 
     /**
      * Constructs a new Skeleton
-     * @param chatServer any class that implements {@link ChatServer} interface
      */
-    public ChatServerSkeleton(ChatServer chatServer) {
+    public ChatServerSkeleton() {
         this.messageManager = new MessageManager();
-        this.chatServer = chatServer;
+        this.chatServer = new ChatServerImpl();
         System.out.println(this.messageManager.getMyAddress());
     }
 
@@ -48,26 +47,20 @@ public class ChatServerSkeleton {
     }
 
     private void handleRegister(MethodCallMessage incommingRequest) {
-        String name = incommingRequest.getParameter("name");
         String ipAddress = incommingRequest.getParameter("ipAddress");
         Integer port = Integer.valueOf(incommingRequest.getParameter("port"));
-        ChatPerson chatPerson = new ChatPerson(name);
         NetworkAddress networkAddress = new NetworkAddress(ipAddress, port);
-        chatPerson.setNetworkAddress(networkAddress);
-        System.out.println("BEGIN: CHATSERVERSKELETON: handleRegister " + chatPerson.toString());
-        chatServer.register(chatPerson);
+        System.out.println("BEGIN: CHATSERVERSKELETON: handleRegister " + networkAddress.toString());
+        chatServer.register(new ChatClientStub(networkAddress));
         sendEmptyReply(incommingRequest);
-        System.out.println("END: CHATSERVERSKELETON: handleRegister " + chatPerson.toString());
+        System.out.println("END: CHATSERVERSKELETON: handleRegister " + networkAddress.toString());
     }
 
     private void handleUnRegister(MethodCallMessage incommingRequest) {
-        String name = incommingRequest.getParameter("name");
         String ipAddress = incommingRequest.getParameter("ipAddress");
         Integer port = Integer.valueOf(incommingRequest.getParameter("port"));
-        ChatPerson chatPerson = new ChatPerson(name);
         NetworkAddress networkAddress = new NetworkAddress(ipAddress, port);
-        chatPerson.setNetworkAddress(networkAddress);
-        chatServer.unRegister(chatPerson);
+        chatServer.unRegister(new ChatClientStub(networkAddress));
         sendEmptyReply(incommingRequest);
     }
 

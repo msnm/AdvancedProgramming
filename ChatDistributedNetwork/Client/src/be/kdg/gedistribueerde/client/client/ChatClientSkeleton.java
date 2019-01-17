@@ -12,14 +12,13 @@ import java.util.List;
  */
 public class ChatClientSkeleton implements Runnable {
     private final MessageManager messageManager;
-    private final List<ChatClient> chatClients;
+    private final ChatClient chatClient;
 
-    public ChatClientSkeleton(List<ChatClient> chatClient, MessageManager messageManager) {
-        this.messageManager = messageManager;
-        this.chatClients = chatClient;
+    public ChatClientSkeleton(ChatClient chatClient, MessageManager chatClientMessageManager) {
+        this.messageManager = chatClientMessageManager;
+        this.chatClient = chatClient;
         System.out.println(messageManager.getMyAddress() + " of CHATCLIENTSKELETON");
     }
-
 
     /**
      * The main loop for this skeleton.
@@ -36,6 +35,9 @@ public class ChatClientSkeleton implements Runnable {
         String methodName = request.getMethodName();
         if ("receive".equals(methodName)) {
             handleReceive(request);
+        }
+        else if ("getName".equals(methodName)) {
+            handleName(request);
         } else {
             System.out.println("ChatClientSkeleton: received an unknown request: " + request.getMethodName() + " " + request.getOriginator() );
             System.out.println(request);
@@ -45,9 +47,18 @@ public class ChatClientSkeleton implements Runnable {
     private void handleReceive(MethodCallMessage incommingRequest) {
         System.out.println("BEGIN: CHATCLIENTSKELTON: handleReceive");
         String message = incommingRequest.getParameter("message");
-        chatClients.stream().forEach(v -> v.receive(message));
+        chatClient.receive(message);
         sendEmptyReply(incommingRequest);
         System.out.println("END: CHATCLIENTSKELTON: handleReceive");
+    }
+
+    private void handleName(MethodCallMessage incomingRequest) {
+        System.out.println("BEGIN: CHATCLIENTSKELETON: handleName");
+        String name = chatClient.getName();
+        MethodCallMessage reply = new MethodCallMessage(messageManager.getMyAddress(), "result");
+        reply.setParameter("name", name);
+        messageManager.send(reply, incomingRequest.getOriginator());
+        System.out.println("END: CHATCLIENTSKELETON: handleName");
     }
 
     /**

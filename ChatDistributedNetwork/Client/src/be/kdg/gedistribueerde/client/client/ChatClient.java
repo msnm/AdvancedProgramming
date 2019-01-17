@@ -13,4 +13,11 @@ public interface ChatClient {
      * @param message
      */
     void receive(String message);
+
+
+    /**
+     * To receive the name of the chatclient
+     * @return
+     */
+    String getName();
 }

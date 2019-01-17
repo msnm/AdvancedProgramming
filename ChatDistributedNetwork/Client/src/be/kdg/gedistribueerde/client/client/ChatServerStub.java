@@ -13,35 +13,40 @@ import be.kdg.gedistribueerde.server.server.ChatServer;
 public class ChatServerStub implements ChatServer {
     private final NetworkAddress chatServerNetworkAddress;
     private final MessageManager messageManager;
+    private final NetworkAddress clientNetworkAddress;
 
-    public ChatServerStub(NetworkAddress chatServerAddress, MessageManager messageManager) {
+
+    /**
+     * Constructs a new ChatServerStub using the address of the real component
+     * @param chatServerAddress
+     */
+    public ChatServerStub(NetworkAddress chatServerAddress, NetworkAddress clientNetworkAddress) {
         this.chatServerNetworkAddress = chatServerAddress;
-        this.messageManager = messageManager;
+        this.messageManager = new MessageManager();
+        this.clientNetworkAddress = clientNetworkAddress;
         System.out.println(messageManager.getMyAddress() + " of CHATSERVERSTUB");
 
     }
 
     @Override
-    public void register(ChatPerson chatPerson) {
-        System.out.println("BEGIN: CHATSERVERSTUB: Registering person " + chatPerson.toString());
+    public void register(ChatClient chatClient) {
+        System.out.println("BEGIN: CHATSERVERSTUB");
         //1. Creating the messageFormat that goes over the wire
         MethodCallMessage message = new MethodCallMessage(messageManager.getMyAddress(),"register");
-        message.setParameter("name", chatPerson.getName());
-        message.setParameter("ipAddress", chatPerson.getNetworkAddress().getIpAddress());
-        message.setParameter("port", Integer.toString(chatPerson.getNetworkAddress().getPortNumber()));
+        message.setParameter("port", Integer.toString(this.clientNetworkAddress.getPortNumber()));
+        message.setParameter("ipAddress", this.clientNetworkAddress.getIpAddress());
         //2. Sending the message from the application layer down to the physical layer to the destinee
         messageManager.send(message, chatServerNetworkAddress);
         //3. The call is synchronous thus we wait for a positive or negative response code before we close the thread
         checkEmptyReply();
-        System.out.println("END: CHATSERVERSTUB: Registering person " + chatPerson.toString());
+        System.out.println("END: CHATSERVERSTUB");
     }
 
     @Override
-    public void unRegister(ChatPerson chatPerson) {
+    public void unRegister(ChatClient chatClient) {
         MethodCallMessage message = new MethodCallMessage(messageManager.getMyAddress(),"unRegister");
-        message.setParameter("name", chatPerson.getName());
-        message.setParameter("ipAddress", chatPerson.getNetworkAddress().getIpAddress());
-        message.setParameter("port", Integer.toString(chatPerson.getNetworkAddress().getPortNumber()));
+        message.setParameter("port", Integer.toString(this.clientNetworkAddress.getPortNumber()));
+        message.setParameter("ipAddress", this.clientNetworkAddress.getIpAddress());
         messageManager.send(message, chatServerNetworkAddress);
         checkEmptyReply();
     }

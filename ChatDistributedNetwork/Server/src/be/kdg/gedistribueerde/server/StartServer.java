@@ -1,5 +1,6 @@
 package be.kdg.gedistribueerde.server;
 
+import be.kdg.gedistribueerde.server.communication.MessageManager;
 import be.kdg.gedistribueerde.server.server.ChatServerImpl;
 import be.kdg.gedistribueerde.server.server.ChatServerSkeleton;
 
@@ -10,8 +11,7 @@ import be.kdg.gedistribueerde.server.server.ChatServerSkeleton;
 public class StartServer {
 
     public static void main(String[] args) {
-        ChatServerImpl chatServerImpl = new ChatServerImpl();
-        ChatServerSkeleton chatServerSkeleton = new ChatServerSkeleton(chatServerImpl);
+        ChatServerSkeleton chatServerSkeleton = new ChatServerSkeleton();
         chatServerSkeleton.run();
     }
 }

@@ -1,7 +1,6 @@
 package be.kdg.gedistribueerde.server.server;
 
 
-import be.kdg.gedistribueerde.server.model.ChatPerson;
 
 /**
  * Interface for the ChatServer component
@@ -12,15 +11,15 @@ public interface ChatServer {
 
     /**
      * Registers a person to the running ChatServer
-     * @param chatPerson has a name and an optional networkaddress
+     * @param chatClient
      */
-    void register(ChatPerson chatPerson);
+    void register(ChatClient chatClient);
 
     /**
      * Unregisters a person from the running ChatServer
-     * @param chatPerson has a name and an optional networkaddress
+     * @param chatClient
      */
-    void unRegister(ChatPerson chatPerson);
+    void unRegister(ChatClient chatClient);
 
 
     /**
