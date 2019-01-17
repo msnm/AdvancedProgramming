@@ -9,12 +9,12 @@ public final class ChatClientImpl  implements ChatClient  {
     private ChatServer chatServer;
     private TextReceiver textReceiver;
     private String name;
-    private NetworkAddress clientSkeletonAddress;
 
-    public ChatClientImpl(String name, ChatServer chatServer, NetworkAddress clientSkeletonAddress) {
+
+    //TODO Constructor moet orgineel blijven
+    public ChatClientImpl(String name, ChatServer chatServer) {
         this.chatServer = chatServer;
         this.name = name;
-        this.clientSkeletonAddress = clientSkeletonAddress;
     }
 
     public String getName() {
@@ -28,14 +28,12 @@ public final class ChatClientImpl  implements ChatClient  {
     public void unregister() {
 
         ChatPerson chatPerson = new ChatPerson(this.getName());
-        chatPerson.setNetworkAddress(clientSkeletonAddress);
         chatServer.unRegister(chatPerson);
     }
 
     public void register() {
         System.out.println("BEGIN: CHATCLIENTIMPL: registering person " + this.getName());
         ChatPerson chatPerson = new ChatPerson(this.getName());
-        chatPerson.setNetworkAddress(clientSkeletonAddress);
         chatServer.register(chatPerson);
         System.out.println("END: CHATCLIENTIMPL: registering person " + this.getName());
     }

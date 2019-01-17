@@ -12,21 +12,18 @@ public interface ChatServer {
 
     /**
      * Registers a person to the running ChatServer
-     * @param chatPerson has a name and an optional networkaddress
      */
-    void register(ChatPerson chatPerson);
+    void register();
 
     /**
      * Unregisters a person from the running ChatServer
-     * @param chatPerson has a name and an optional networkaddress
      */
-    void unRegister(ChatPerson chatPerson);
+    void unRegister();
 
 
     /**
      * Sends the message to all the clients
-     * @param name the name of the sender
      * @param message the message to be send
      */
-    void send(String name, String message);
+    void send(String message);
 }

@@ -37,12 +37,12 @@ public class StartClient {
         ChatServer chatServer = new ChatServerStub(chatServerAddress, chatServerStubAddress);
 
         //4. We create two people who can chat together! It is a groupchat!
-        ChatClient chatClient1 = new ChatClientImpl("Michael", chatServer, chatClientSkeletonAddress.getMyAddress());
+        ChatClient chatClient1 = new ChatClientImpl("Michael", chatServer);
         new ChatFrame(chatClient1);
-        ChatClient chatClient2 = new ChatClientImpl("Quirine", chatServer, chatClientSkeletonAddress.getMyAddress());
+        ChatClient chatClient2 = new ChatClientImpl("Quirine", chatServer);
         new ChatFrame(chatClient2);
 
-        //5. The server will send receive messages. Therefore we have a chatClientSkeleton who listends
+        //5. The server will send receive messages. Therefore we have a chatClientSkeleton who listens
         //   to its port. The chatSkeleton has a list of chatClients, because each client must receive
         //   the message.
         List<ChatClient> chatClients = new ArrayList<>();
