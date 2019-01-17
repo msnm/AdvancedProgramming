@@ -56,14 +56,18 @@ public class StubInvocationHandler implements InvocationHandler {
             }
         }
         //3. Send the message
+        System.out.println("Stub sends message to skeleton: " + methodCallMessage.toString() + " address skeleton " + networkAddressDestinee.toString());
         messageManager.send(methodCallMessage, networkAddressDestinee);
 
         //4. If there is a return value, we wait for a reply and cast the reply type
         if (!method.getReturnType().equals(Void.TYPE)) {
+            System.out.println("The return type is not VOID it is " + method.getReturnType().getSimpleName());
             MethodCallMessage reply = messageManager.wReceive();
+            System.out.println("The reply is "+ reply.toString());
+            if (!"result".equals(reply.getMethodName())) return null;
             Map<String, String> resultMap = reply.getParameters();
 
-            //4.1 Need to check wheter it is primitive/wrapper versus other object
+            //4.1 Need to check whether it is primitive/wrapper versus other object
             Class aClass = Class.forName(CastUtil.classForNameWrapPrimitives(method.getReturnType()));
             Object returnObject = null;
 
@@ -86,9 +90,25 @@ public class StubInvocationHandler implements InvocationHandler {
             }
             return  returnObject;
         }
+        else {
+            System.out.println("Waiting for empty reply");
+            checkEmptyReply();
+        }
 
         System.out.printf("END: invoke(%s, %s)%n%n", proxy.getClass().getSimpleName(), method.getName());
         return null;
+    }
+
+    private void checkEmptyReply() {
+        String value = "";
+        while (!"Ok".equals(value)) {
+            MethodCallMessage reply = messageManager.wReceive();
+            if (!"result".equals(reply.getMethodName())) {
+                System.out.println("Waiting for empty reply: methodname" +  reply.getMethodName());
+                continue;
+            }
+            value = reply.getParameter("result");
+        }
     }
 
 

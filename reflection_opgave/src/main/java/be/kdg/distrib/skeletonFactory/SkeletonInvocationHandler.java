@@ -79,8 +79,6 @@ public class SkeletonInvocationHandler implements InvocationHandler {
         };
         //thread.setDaemon(true);
         thread.start();
-
-
     }
 
     private Object handleRequest(MethodCallMessage request) throws Exception {
@@ -91,10 +89,11 @@ public class SkeletonInvocationHandler implements InvocationHandler {
         //2 Retrieve the parameters from the request
         Map<String, String> requestParameters = request.getParameters();
         Object[] args = null;
-        //3. We need to determine the arguments of the method and make a distinction between primitive/wrappers and
-        //   other objects.
 
-        if(methodTarget!=null && countParameters(methodTarget.getParameters()) == requestParameters.size()) {
+        //3. We need to determine the arguments of the method and make a distinction between primitive/wrappers and
+        //   other objects. The parameters of the request should, match the paramters of the target method
+        System.out.println("RequestParameter aantal " + requestParameters.size());
+        if(methodTarget != null && countParameters(methodTarget.getParameters()) == requestParameters.size()) {
             Parameter[] methodParams = methodTarget.getParameters(); //returns in declaration order!
             //3.1 For every parameter we create an object.
             //   The value of the object is found in request.getParameters.
@@ -106,16 +105,7 @@ public class SkeletonInvocationHandler implements InvocationHandler {
                 if(!CastUtil.isPrimitiveOrWrapper(param.getType())) {
                     Class classParam = Class.forName(param.getType().getName());
                     argument = classParam.newInstance();
-                    /*
-                    //TODO: WAAROM WERKT DIT NIET?
-                    for(Method method: classParam.getMethods()) {
-                        if(method.getName().startsWith("set")) {
-                            String methodName = method.getName();
-                            String searchRequestParam = "arg.".concat(Integer.toString(count)).concat(methodName.substring(3).toLowerCase());
-                            method.invoke(objectParam, CastUtil.castResultToGivenType(requestParameters.get(searchRequestParam), classParam));
-                        }
-                    }
-                    */
+
                     for(Field field : argument.getClass().getDeclaredFields()) {
                         String searchRequestParam = "arg".concat(Integer.toString(count)).concat(".").concat(field.getName());
                         System.out.println("searchRequest param " + searchRequestParam);
@@ -149,9 +139,11 @@ public class SkeletonInvocationHandler implements InvocationHandler {
         //5. Sending a reply.
         //5.1 Sending an empty reply if result == null, otherwise we return the object
         if(methodTarget.getReturnType().equals(Void.TYPE)) {
+            System.out.println("Sending empty reply");
             this.sendEmptyReply(request);
         }
         else {
+            System.out.println("Sending reply");
             MethodCallMessage reply = new MethodCallMessage(messageManager.getMyAddress(), "result");
             if(CastUtil.isPrimitiveOrWrapper(methodTarget.getReturnType())) {
                 reply.setParameter("result", result.toString());
@@ -160,6 +152,7 @@ public class SkeletonInvocationHandler implements InvocationHandler {
                 List<String> methodNames = Arrays.stream(result.getClass().getMethods()).map(v -> v.getName()).collect(Collectors.toList());
                 for(Field field : result.getClass().getDeclaredFields()) {
                     String searchSetter = "set".concat(field.getName().substring(0,1).toUpperCase()).concat(field.getName().substring(1));
+                    System.out.println("Search setter: "+ searchSetter);
                     if(methodNames.contains(searchSetter)) {
                         field.setAccessible(true);
                         String param = field.get(result).toString();
@@ -182,14 +175,17 @@ public class SkeletonInvocationHandler implements InvocationHandler {
             countParameters = parameters.length;
             if(!CastUtil.isPrimitiveOrWrapper(parameter.getType())) {
                 countParameters--; //Otherwise we count the object as a parameter!
-                //We assume that if a setter exist, there will be a parameter!
-                for(Method method : parameter.getType().getMethods()) {
-                    if(method.getName().startsWith("get")) {
+                //We assume that if a getter exist, there will be a parameter!
+                for(Method method : parameter.getType().getDeclaredMethods()) {
+                    System.out.println("Method" + method.getName() + "startWithGet " + method.getName().startsWith("get") + " or startwith is " + method.getName().startsWith("is") );
+                    if(method.getName().startsWith("get") || method.getName().startsWith("is")) {
                         countParameters++;
+                        System.out.println(countParameters);
                     }
                 }
             }
         }
+        System.out.println("Counted " + countParameters + " parameters vs actual parameters " + parameters.length);
         return  countParameters;
     }
 

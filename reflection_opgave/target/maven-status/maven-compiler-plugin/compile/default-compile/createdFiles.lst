@@ -1,6 +1,12 @@
 be/kdg/distrib/communication/NetworkAddress.class
 be/kdg/distrib/communication/MessageReaderWriter.class
+be/kdg/distrib/stubFactory/StubInvocationHandler.class
 be/kdg/distrib/skeletonFactory/Skeleton.class
 be/kdg/distrib/communication/MethodCallMessage.class
+be/kdg/distrib/skeletonFactory/SkeletonFactory.class
 be/kdg/distrib/communication/NameValuePair.class
+be/kdg/distrib/skeletonFactory/SkeletonInvocationHandler$1.class
+be/kdg/distrib/util/CastUtil.class
+be/kdg/distrib/skeletonFactory/SkeletonInvocationHandler.class
+be/kdg/distrib/stubFactory/StubFactory.class
 be/kdg/distrib/communication/MessageManager.class

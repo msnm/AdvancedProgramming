@@ -1,0 +1,8 @@
+be/kdg/distrib/TestStubFactory.class
+be/kdg/distrib/TestSkeletonFactory.class
+be/kdg/distrib/testclasses/TestSkeleton.class
+be/kdg/distrib/testclasses/TestImplementation.class
+be/kdg/distrib/testclasses/TestObject.class
+be/kdg/distrib/TestSkeletonFactory$MyLambda.class
+be/kdg/distrib/testclasses/TestInterface.class
+be/kdg/distrib/testclasses/TestInterface2.class
